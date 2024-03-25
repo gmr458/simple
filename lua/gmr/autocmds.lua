@@ -1,14 +1,34 @@
-vim.api.nvim_create_autocmd('VimLeave', {
+vim.api.nvim_create_autocmd('BufReadPost', {
     group = vim.api.nvim_create_augroup(
-        'gmr_restore_cursor_shape_on_exit',
+        'gmr_jump_to_the_last_known_cursor_position',
         { clear = true }
     ),
     pattern = { '*' },
-    desc = 'Restores horizontal shape cursor for Alacritty on exit',
+    desc = 'when editing a file, always jump to the last known cursor position',
     callback = function()
-        vim.opt.guicursor = 'a:hor1'
+        local line = vim.fn.line '\'"'
+        if
+            line >= 1
+            and line <= vim.fn.line '$'
+            and vim.bo.filetype ~= 'commit'
+            and vim.fn.index({ 'xxd', 'gitrebase' }, vim.bo.filetype) == -1
+        then
+            vim.cmd 'normal! g`"'
+        end
     end,
 })
+
+-- vim.api.nvim_create_autocmd('VimLeave', {
+--     group = vim.api.nvim_create_augroup(
+--         'gmr_restore_cursor_shape_on_exit',
+--         { clear = true }
+--     ),
+--     pattern = { '*' },
+--     desc = 'Restores horizontal shape cursor for Alacritty on exit',
+--     callback = function()
+--         vim.opt.guicursor = 'a:hor1'
+--     end,
+-- })
 
 vim.api.nvim_create_autocmd('TermOpen', {
     group = vim.api.nvim_create_augroup(
@@ -60,8 +80,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     ),
     desc = 'Highlight on yank',
     callback = function()
-        -- Setting a priority higher than the LSP references one.
-        vim.highlight.on_yank { higroup = 'Visual', priority = 250 }
+        vim.highlight.on_yank { higroup = 'Visual' }
     end,
 })
 
@@ -92,34 +111,34 @@ vim.api.nvim_create_autocmd('FileType', {
     desc = 'Enable wrap and spell on Git Commits and Markdown',
     callback = function()
         vim.opt_local.wrap = true
-        vim.opt_local.spell = true
+        vim.opt_local.spell = false
     end,
 })
 
-vim.api.nvim_create_autocmd('CmdlineEnter', {
-    group = vim.api.nvim_create_augroup(
-        'gmr_cmdheight_1_on_cmdlineenter',
-        { clear = true }
-    ),
-    desc = 'Don\'t hide the status line when typing a command',
-    command = ':set cmdheight=1',
-})
-
-vim.api.nvim_create_autocmd('CmdlineLeave', {
-    group = vim.api.nvim_create_augroup(
-        'gmr_cmdheight_0_on_cmdlineleave',
-        { clear = true }
-    ),
-    desc = 'Hide cmdline when not typing a command',
-    command = ':set cmdheight=0',
-})
-
-vim.api.nvim_create_autocmd('BufWritePost', {
-    group = vim.api.nvim_create_augroup(
-        'gmr_hide_message_after_write',
-        { clear = true }
-    ),
-    desc = 'Get rid of message after writing a file',
-    pattern = { '*' },
-    command = 'redrawstatus',
-})
+-- vim.api.nvim_create_autocmd('CmdlineEnter', {
+--     group = vim.api.nvim_create_augroup(
+--         'gmr_cmdheight_1_on_cmdlineenter',
+--         { clear = true }
+--     ),
+--     desc = 'Don\'t hide the status line when typing a command',
+--     command = ':set cmdheight=1',
+-- })
+--
+-- vim.api.nvim_create_autocmd('CmdlineLeave', {
+--     group = vim.api.nvim_create_augroup(
+--         'gmr_cmdheight_0_on_cmdlineleave',
+--         { clear = true }
+--     ),
+--     desc = 'Hide cmdline when not typing a command',
+--     command = ':set cmdheight=0',
+-- })
+--
+-- vim.api.nvim_create_autocmd('BufWritePost', {
+--     group = vim.api.nvim_create_augroup(
+--         'gmr_hide_message_after_write',
+--         { clear = true }
+--     ),
+--     desc = 'Get rid of message after writing a file',
+--     pattern = { '*' },
+--     command = 'redrawstatus',
+-- })

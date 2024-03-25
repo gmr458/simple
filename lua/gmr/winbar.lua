@@ -2,23 +2,6 @@ local M = {}
 
 M.winbar_filetype_exclude = {
     'help',
-    'startify',
-    'dashboard',
-    'packer',
-    'neogitstatus',
-    'NvimTree',
-    'Trouble',
-    'alpha',
-    'lir',
-    'Outline',
-    'spectre_panel',
-    'toggleterm',
-    'DressingSelect',
-    'Jaq',
-    'harpoon',
-    'lab',
-    'Markdown',
-    'fzf',
     'netrw',
     '',
 }
@@ -30,7 +13,8 @@ M.get_filename = function()
     if not utils.is_nil_or_empty_string(filename) then
         local readonly = ''
         if vim.bo.readonly then
-            readonly = ' '
+            readonly = ' %#WarningMsg#READONLY%*'
+            -- readonly = ' READONLY'
         end
 
         return readonly .. ' ' .. '%#WinBar#' .. filename .. '%*'
@@ -55,7 +39,7 @@ M.get_winbar = function()
     local value = M.get_filename()
 
     if not utils.is_nil_or_empty_string(value) and utils.is_unsaved() then
-        local mod = '%#WinBarUnsavedSymbol#*%*'
+        local mod = '%#WarningMsg#*%*'
         value = value .. mod
     end
 

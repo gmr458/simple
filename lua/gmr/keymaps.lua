@@ -117,8 +117,6 @@ vim.keymap.set('n', '<leader>sb', function()
     vim.opt.background = vim.o.background == 'dark' and 'light' or 'dark'
 end, { desc = 'Switch background' })
 
-vim.keymap.set('n', '<leader>ct', '<cmd>ColorizerToggle<cr>')
-
 vim.keymap.set(
     'n',
     '<leader>vt',
@@ -132,21 +130,17 @@ vim.keymap.set(
     { desc = 'Open terminal in horizontal split' }
 )
 
-vim.keymap.set('n', '<leader>ch', function()
-    vim.opt.cmdheight = vim.o.cmdheight == 0 and 1 or 0
-end, { silent = true, desc = 'Switch cmdheight between 1 and 0' })
-
 vim.keymap.set(
     { 'n', 'o', 'x' },
     '<s-h>',
-    '^',
-    { desc = 'Move cursor to the first character of the current line' }
+    '<cmd>bprevious<cr>',
+    { desc = 'Previous buffer' }
 )
 vim.keymap.set(
     { 'n', 'o', 'x' },
     '<s-l>',
-    'g_',
-    { desc = 'Move cursor to the last character of the current line' }
+    '<cmd>bnext<cr>',
+    { desc = 'Next buffer' }
 )
 
 -- insert
