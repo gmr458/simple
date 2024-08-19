@@ -1,3 +1,4 @@
+vim.g.editorconfig = false
 vim.g.loaded_gzip = 1
 vim.g.loaded_tarPlugin = 1
 vim.g.loaded_tar = 1
@@ -37,6 +38,7 @@ opt.fillchars:append { eob = ' ' }
 opt.grepprg = 'rg --vimgrep'
 -- opt.guifont = 'BlexMono Nerd Font Mono:h13'
 opt.ignorecase = true
+-- opt.inccommand = 'split'
 opt.laststatus = 3
 opt.list = false
 -- opt.listchars:append {
@@ -52,6 +54,7 @@ opt.relativenumber = true
 opt.scrolloff = 8
 opt.shiftwidth = 4
 opt.showcmd = true
+opt.showcmdloc = 'statusline'
 opt.showmode = false
 opt.showtabline = 1
 opt.sidescroll = 3
@@ -67,7 +70,6 @@ opt.splitkeep = 'screen'
 opt.splitright = true
 opt.swapfile = false
 opt.tabstop = 4
-opt.termguicolors = true
 opt.timeoutlen = 800
 opt.undofile = true
 opt.undolevels = 10000
@@ -75,3 +77,5 @@ opt.updatetime = 200
 opt.virtualedit = 'block'
 -- opt.wildoptions = ''
 opt.wrap = false
+
+vim.cmd.colorscheme 'cold'
