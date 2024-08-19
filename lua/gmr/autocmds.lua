@@ -1,3 +1,5 @@
+local indentation = require 'gmr.indentation'
+
 vim.api.nvim_create_autocmd('BufReadPost', {
     group = vim.api.nvim_create_augroup(
         'gmr_jump_to_the_last_known_cursor_position',
@@ -141,4 +143,31 @@ vim.api.nvim_create_autocmd('BufWritePost', {
     desc = 'Get rid of message after writing a file',
     pattern = { '*' },
     command = 'redrawstatus',
+})
+
+vim.api.nvim_create_autocmd('BufReadPost', {
+    group = vim.api.nvim_create_augroup(
+        'gmr_detect_indentation',
+        { clear = true }
+    ),
+    desc = 'Detect indentation after opening a file',
+    pattern = { '*' },
+    callback = function(args)
+        local bufnr = args.buf
+        local result = indentation.detect(bufnr)
+        if result == 'tabs' then
+            local current = vim.bo[bufnr].expandtab
+            if current then
+                vim.bo[bufnr].expandtab = false
+            end
+        elseif type(result) == 'number' and result > 0 then
+            local current = vim.bo[bufnr].expandtab
+            if not current then
+                vim.bo[bufnr].expandtab = true
+            end
+            vim.bo[bufnr].tabstop = result
+            vim.bo[bufnr].softtabstop = result
+            vim.bo[bufnr].shiftwidth = result
+        end
+    end,
 })
