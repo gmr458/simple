@@ -47,10 +47,7 @@ local function lsp_active()
     local space = '%#StatusLineMedium# %*'
 
     if #clients > 0 then
-        return space
-            .. '%#StatusLineLspActive#%*'
-            .. space
-            .. '%#StatusLineMedium#LSP%*'
+        return space .. '%#StatusLineMedium#LSP%*'
     end
 
     return ''
@@ -60,7 +57,7 @@ end
 local function diagnostics_error()
     local count = get_lsp_diagnostics_count(vim.diagnostic.severity.ERROR)
     if count > 0 then
-        return string.format('%%#StatusLineLspError#  %s%%*', count)
+        return string.format('%%#StatusLineLspError# %s%%*', count)
     end
 
     return ''
@@ -70,7 +67,7 @@ end
 local function diagnostics_warns()
     local count = get_lsp_diagnostics_count(vim.diagnostic.severity.WARN)
     if count > 0 then
-        return string.format('%%#StatusLineLspWarn#  %s%%*', count)
+        return string.format('%%#StatusLineLspWarn# %s%%*', count)
     end
 
     return ''
@@ -80,7 +77,7 @@ end
 local function diagnostics_hint()
     local count = get_lsp_diagnostics_count(vim.diagnostic.severity.HINT)
     if count > 0 then
-        return string.format('%%#StatusLineLspHint#  %s%%*', count)
+        return string.format('%%#StatusLineLspHint# %s%%*', count)
     end
 
     return ''
@@ -90,7 +87,7 @@ end
 local function diagnostics_info()
     local count = get_lsp_diagnostics_count(vim.diagnostic.severity.INFO)
     if count > 0 then
-        return string.format('%%#StatusLineLspInfo#  %s%%*', count)
+        return string.format('%%#StatusLineLspInfo# %s%%*', count)
     end
 
     return ''
