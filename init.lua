@@ -4,4 +4,4 @@ require 'gmr.autocmds'
 require 'gmr.statusline'
 require 'gmr.winbar'
 
-vim.cmd.colorscheme 'habamax'
+vim.cmd.colorscheme 'cold'
