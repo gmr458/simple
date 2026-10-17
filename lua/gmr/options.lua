@@ -1,3 +1,12 @@
+vim.filetype.add {
+    filename = {
+        ['Caddyfile'] = 'caddyfile',
+    },
+    pattern = {
+        ['Caddyfile.*'] = 'caddyfile',
+    },
+}
+
 vim.g.editorconfig = false
 vim.g.loaded_gzip = 1
 vim.g.loaded_tarPlugin = 1
@@ -24,23 +33,34 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_typecorr = 1
 vim.g.loaded_spellfile_plugin = 1
 
+-- for some reason vim (not neovim) loads a sql plugin for completion,
+-- this plugins maps <C-c>, this disabled that mapping
+vim.g.omni_sql_no_default_maps = 1
+
 local opt = vim.opt
 
 -- opt.background = "dark"
 opt.backup = false
 opt.cmdheight = 0
+opt.completeitemalign = 'abbr,menu,kind'
 opt.completeopt = { 'menu', 'menuone', 'noselect' }
 opt.conceallevel = 3
 opt.confirm = true
 opt.cursorline = true
 opt.expandtab = true
 opt.fillchars:append { eob = ' ' }
+opt.foldcolumn = '0'
+opt.foldenable = true
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+opt.foldmethod = 'expr'
+opt.foldtext = ''
 opt.grepprg = 'rg --vimgrep'
 -- opt.guifont = 'BlexMono Nerd Font Mono:h13'
 opt.ignorecase = true
 -- opt.inccommand = 'split'
 opt.laststatus = 3
-opt.list = false
+opt.list = true
 -- opt.listchars:append {
 --     eol = '↲',
 --     tab = '│ ',
@@ -51,7 +71,7 @@ opt.number = true
 opt.numberwidth = 1
 opt.pumheight = 10
 opt.relativenumber = true
-opt.scrolloff = 8
+opt.scrolloff = 2
 opt.shiftwidth = 4
 opt.showcmd = true
 opt.showcmdloc = 'statusline'
@@ -76,6 +96,7 @@ opt.undolevels = 10000
 opt.updatetime = 200
 opt.virtualedit = 'block'
 -- opt.wildoptions = ''
+opt.winborder = 'single'
 opt.wrap = false
 
 vim.cmd.colorscheme 'cold'

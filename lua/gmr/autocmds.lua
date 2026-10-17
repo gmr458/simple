@@ -20,25 +20,13 @@ vim.api.nvim_create_autocmd('BufReadPost', {
     end,
 })
 
--- vim.api.nvim_create_autocmd('VimLeave', {
---     group = vim.api.nvim_create_augroup(
---         'gmr_restore_cursor_shape_on_exit',
---         { clear = true }
---     ),
---     pattern = { '*' },
---     desc = 'Restores horizontal shape cursor for Alacritty on exit',
---     callback = function()
---         vim.opt.guicursor = 'a:hor1'
---     end,
--- })
-
 vim.api.nvim_create_autocmd('TermOpen', {
     group = vim.api.nvim_create_augroup(
         'gmr_clean_term_mode',
         { clear = true }
     ),
     pattern = { '*' },
-    desc = '',
+    desc = 'Disable line numbers, relative numbers, and signcolumn in terminal buffers',
     callback = function()
         vim.opt_local.number = false
         vim.opt_local.relativenumber = false
@@ -82,7 +70,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     ),
     desc = 'Highlight on yank',
     callback = function()
-        vim.highlight.on_yank { higroup = 'Visual' }
+        vim.highlight.on_yank { higroup = 'Search' }
     end,
 })
 
@@ -106,14 +94,13 @@ vim.api.nvim_create_autocmd('VimResized', {
 
 vim.api.nvim_create_autocmd('FileType', {
     group = vim.api.nvim_create_augroup(
-        'gmr_wrap_spell_for_writing',
+        'gmr_config_for_markdown',
         { clear = true }
     ),
-    pattern = { 'gitcommit', 'markdown' },
-    desc = 'Enable wrap and spell on Git Commits and Markdown',
+    pattern = { 'markdown' },
+    desc = 'Config for Git Markdown',
     callback = function()
-        vim.opt_local.wrap = true
-        vim.opt_local.spell = false
+        vim.opt_local.conceallevel = 0
     end,
 })
 
@@ -145,29 +132,50 @@ vim.api.nvim_create_autocmd('BufWritePost', {
     command = 'redrawstatus',
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+    group = vim.api.nvim_create_augroup('gmr_nowrap', { clear = true }),
+    desc = 'No wrap in these filetypes',
+    pattern = { 'checkhealth' },
+    command = ':set nowrap',
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+    group = vim.api.nvim_create_augroup(
+        'gmr_remove_char_from_iskeyword',
+        { clear = true }
+    ),
+    desc = 'Remove - from iskeyword option',
+    pattern = { 'astro' },
+    command = 'setlocal iskeyword-=-',
+})
+
 vim.api.nvim_create_autocmd('BufReadPost', {
     group = vim.api.nvim_create_augroup(
         'gmr_detect_indentation',
         { clear = true }
     ),
-    desc = 'Detect indentation after opening a file',
+    desc = 'Detect indentation when loading a file',
     pattern = { '*' },
     callback = function(args)
-        local bufnr = args.buf
-        local result = indentation.detect(bufnr)
-        if result == 'tabs' then
-            local current = vim.bo[bufnr].expandtab
-            if current then
-                vim.bo[bufnr].expandtab = false
-            end
-        elseif type(result) == 'number' and result > 0 then
-            local current = vim.bo[bufnr].expandtab
-            if not current then
-                vim.bo[bufnr].expandtab = true
-            end
-            vim.bo[bufnr].tabstop = result
-            vim.bo[bufnr].softtabstop = result
-            vim.bo[bufnr].shiftwidth = result
-        end
+        indentation.detect(args.buf)
+    end,
+})
+
+vim.api.nvim_create_autocmd('BufNewFile', {
+    group = vim.api.nvim_create_augroup(
+        'gmr_detect_indentation_new_file',
+        { clear = true }
+    ),
+    desc = 'Detect indentation when saving a new file',
+    pattern = { '*' },
+    callback = function(args)
+        vim.api.nvim_create_autocmd('BufWritePost', {
+            buffer = args.buf,
+            once = true,
+            group = 'gmr_detect_indentation_new_file',
+            callback = function(wargs)
+                indentation.detect(wargs.buf)
+            end,
+        })
     end,
 })

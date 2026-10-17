@@ -1,5 +1,6 @@
 vim.g.mapleader = ' '
 
+--- @type boolean true when running inside Kitty terminal.
 local running_kitty = os.getenv 'TERM' == 'xterm-kitty'
 
 local kitty = require 'gmr.kitty'
@@ -67,15 +68,6 @@ vim.keymap.set(
 -- toggle netrw
 vim.keymap.set('n', '<C-n>', ':Lexplore 20<cr>', { silent = true })
 
--- diagnostics
-vim.keymap.set('n', '<leader>dd', function()
-    vim.diagnostic.setloclist()
-end, { desc = 'Show buffer diagnostics' })
-
-vim.keymap.set('n', '<leader>wd', function()
-    vim.diagnostic.setqflist()
-end, { desc = 'Show workspace diagnostics' })
-
 -- search
 vim.keymap.set(
     'n',
@@ -83,42 +75,64 @@ vim.keymap.set(
     ':nohlsearch<cr>',
     { silent = true, desc = 'Don\'t highlight the current search' }
 )
+vim.keymap.set(
+    'x',
+    '/',
+    '<Esc>/\\%V',
+    { desc = 'Search within visual selection' }
+)
 
--- insert and remove quotes
+-- editing
 vim.keymap.set(
     'n',
-    '<leader>sq',
-    'ciw\'<C-r>"\'<esc>',
-    { silent = true, noremap = true, desc = 'Insert single quotes' }
+    'ci_',
+    'F_lvf_hc',
+    { silent = true, noremap = true, desc = 'Delete word between underscores' }
 )
 vim.keymap.set(
     'n',
-    '<leader>usq',
-    'di\'hPl2x',
-    { silent = true, noremap = true, desc = 'Remove single quotes' }
+    'ci-',
+    'F-lvf-hc',
+    { silent = true, noremap = true, desc = 'Delete word between hyphens' }
 )
 vim.keymap.set(
     'n',
-    '<leader>dq',
-    'ciw"<C-r>""<esc>',
-    { silent = true, noremap = true, desc = 'Insert double quotes' }
+    'ci.',
+    'F.lvf.hc',
+    { silent = true, noremap = true, desc = 'Delete word between dots' }
 )
 vim.keymap.set(
     'n',
-    '<leader>udq',
-    'di"hPl2x',
-    { silent = true, noremap = true, desc = 'Remove double quotes' }
+    'ci<',
+    'F>lvf<hc',
+    { silent = true, noremap = true, desc = 'Delete word between tags' }
 )
-vim.keymap.set('v', '<leader>sq', 'xi\'<esc>pA\'<esc>', {
-    silent = true,
+
+-- better space
+vim.keymap.set('i', 'jk', '<esc>', { desc = 'Use jk to enter in normal mode' })
+
+-- useful stuff
+vim.keymap.set('n', 'x', '"_x', { desc = 'Dot not yank with x' })
+
+vim.keymap.set('n', '<C-a>', 'gg<S-v>G', { desc = 'Select all' })
+
+vim.keymap.set('n', '<leader>fc', '<cmd>foldclose<cr>')
+
+vim.keymap.set('v', '<', '<gv', { desc = 'Stay in indent mode' })
+vim.keymap.set('v', '>', '>gv', { desc = 'Stay in indent mode' })
+
+vim.keymap.set('v', 'p', '"_dP', {
     noremap = true,
-    desc = 'Insert single quotes in visual mode',
-})
-vim.keymap.set('v', '<leader>dq', 'xi"<esc>pA"<esc>', {
     silent = true,
-    noremap = true,
-    desc = 'Insert double quotes in visual mode',
+    desc = 'Remember copied elements when pasted in visual mode',
 })
+
+vim.keymap.set('n', 'dd', function()
+    if vim.fn.getline('.'):match '^%s*$' then
+        return '"_dd'
+    end
+    return 'dd'
+end, { expr = true, desc = 'Yank the line on `dd` only if it is non-empty' })
 
 -- clipboard
 vim.keymap.set(
@@ -129,15 +143,7 @@ vim.keymap.set(
 )
 vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = 'Yank to clipboard' })
 
--- switch
-vim.keymap.set('n', '<leader>sb', function()
-    vim.opt.background = vim.o.background == 'dark' and 'light' or 'dark'
-    if running_kitty then
-        local cmd = 'kitten themes --cache-age=-1 ' .. vim.o.background
-        vim.fn.system(cmd)
-    end
-end, { desc = 'Switch background' })
-
+-- toggles
 vim.keymap.set('n', '<leader>sw', function()
     if vim.o.wrap then
         vim.cmd 'set nowrap'
@@ -170,21 +176,44 @@ vim.keymap.set(
     { desc = 'Use jk to enter in terminal normal mode' }
 )
 
--- better space
-vim.keymap.set('i', 'jk', '<esc>', { desc = 'Use jk to enter in normal mode' })
+--- @type integer | nil
+local terminal_buf = nil
+--- @type integer | nil
+local terminal_win_id = nil
 
--- useful stuff
-vim.keymap.set('n', 'x', '"_x', { desc = 'Dot not yank with x' })
+--- Opens the terminal in a horizontal split, or brings it back
+--- into view if it already exists but is hidden.
+local function open_terminal()
+    if terminal_buf == nil or vim.fn.bufexists(terminal_buf) ~= 1 then
+        vim.cmd 'split | term'
+        terminal_win_id = vim.fn.win_getid()
+        terminal_buf = vim.fn.bufnr '%'
+    elseif
+        terminal_win_id == nil or vim.fn.win_gotoid(terminal_win_id) ~= 1
+    then
+        vim.cmd('sb ' .. terminal_buf)
+        terminal_win_id = vim.fn.win_getid()
+    end
 
-vim.keymap.set('n', '<C-a>', 'gg<S-v>G', { desc = 'Select all' })
+    vim.cmd 'startinsert'
+end
 
-vim.keymap.set('n', '<leader>fc', '<cmd>foldclose<cr>')
+--- Hides the terminal window if it is currently visible.
+local function hide_terminal()
+    if terminal_win_id ~= nil and vim.fn.win_gotoid(terminal_win_id) == 1 then
+        vim.cmd 'hide'
+    end
+end
 
-vim.keymap.set('v', '<', '<gv', { desc = 'Stay in indent mode' })
-vim.keymap.set('v', '>', '>gv', { desc = 'Stay in indent mode' })
+--- Toggles the terminal window visibility.
+local function toggle_terminal()
+    if terminal_win_id ~= nil and vim.fn.win_gotoid(terminal_win_id) == 1 then
+        hide_terminal()
+    else
+        open_terminal()
+    end
+end
 
-vim.keymap.set('v', 'p', '"_dP', {
-    noremap = true,
-    silent = true,
-    desc = 'Remember copied elements when pasted in visual mode',
+vim.keymap.set({ 'n', 't' }, '<A-d>', toggle_terminal, {
+    desc = 'toggle terminal',
 })

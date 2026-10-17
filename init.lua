@@ -1,6 +1,7 @@
 require 'gmr.options'
 require 'gmr.keymaps'
 require 'gmr.autocmds'
+require 'gmr.commands'
 require 'gmr.statusline'
 require 'gmr.winbar'
-require 'gmr.lsp'
+require 'gmr.terminalcolors'
