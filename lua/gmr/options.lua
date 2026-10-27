@@ -1,9 +1,14 @@
 vim.filetype.add {
     filename = {
         ['Caddyfile'] = 'caddyfile',
+        ['caddyfile'] = 'caddyfile',
     },
     pattern = {
         ['Caddyfile.*'] = 'caddyfile',
+        ['caddyfile.*'] = 'caddyfile',
+        ['.*%.Caddyfile'] = 'caddyfile',
+        ['.*%.caddyfile'] = 'caddyfile',
+        ['.*%.caddy'] = 'caddyfile',
     },
 }
 
