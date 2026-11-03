@@ -69,7 +69,7 @@ StatusLine.active = function()
         }
     end
 
-    if redeable_filetypes[vim.bo.filetype] or vim.o.modifiable == false then
+    if redeable_filetypes[vim.bo.filetype] or vim.bo.modifiable == false then
         return table.concat {
             formatted_filetype_or_mode 'StatusLineMode',
             '%=',

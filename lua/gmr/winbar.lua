@@ -14,10 +14,13 @@ M.get_filename = function()
         local readonly = ''
         if vim.bo.readonly then
             readonly = ' %#WarningMsg#READONLY%*'
-            -- readonly = ' READONLY'
         end
 
-        return readonly .. ' ' .. '%#WinBar#' .. filename .. '%*'
+        return readonly
+            .. ' '
+            .. '%#WinBar#'
+            .. filename:gsub('%%', '%%%%')
+            .. '%*'
     end
 end
 

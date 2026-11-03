@@ -52,18 +52,6 @@ vim.keymap.set(
     ':bd!<cr>',
     { silent = true, desc = 'Delete current buffer' }
 )
-vim.keymap.set(
-    { 'n', 'o', 'x' },
-    '<s-h>',
-    '<cmd>bprevious<cr>',
-    { desc = 'Previous buffer' }
-)
-vim.keymap.set(
-    { 'n', 'o', 'x' },
-    '<s-l>',
-    '<cmd>bnext<cr>',
-    { desc = 'Next buffer' }
-)
 
 -- toggle netrw
 vim.keymap.set('n', '<C-n>', ':Lexplore 20<cr>', { silent = true })
