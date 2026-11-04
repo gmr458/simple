@@ -63,7 +63,6 @@ StatusLine.active = function()
         return table.concat {
             mode(),
             '%=',
-            '%=',
             file_percentage(),
             total_lines(),
         }
@@ -73,7 +72,6 @@ StatusLine.active = function()
         return table.concat {
             formatted_filetype_or_mode 'StatusLineMode',
             '%=',
-            '%=',
             file_percentage(),
             total_lines(),
         }
@@ -81,7 +79,6 @@ StatusLine.active = function()
 
     local statusline = {
         mode(),
-        '%=',
         '%=',
         '%S ',
         python_env(),
