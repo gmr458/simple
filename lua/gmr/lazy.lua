@@ -6,6 +6,7 @@ local function add(plugin)
     table.insert(plugin_specs, spec)
 end
 
+add 'gmr.plugins.colorschemes.cold'
 add 'gmr.plugins.gitsigns'
 add 'gmr.plugins.nvim-tree'
 add 'gmr.plugins.scriptease'

@@ -103,5 +103,3 @@ opt.virtualedit = 'block'
 -- opt.wildoptions = ''
 opt.winborder = 'single'
 opt.wrap = false
-
-vim.cmd.colorscheme 'cold'
