@@ -53,8 +53,46 @@ vim.keymap.set(
     { silent = true, desc = 'Delete current buffer' }
 )
 
--- toggle netrw
-vim.keymap.set('n', '<C-n>', ':Lexplore 20<cr>', { silent = true })
+-- nvim-tree
+vim.keymap.set(
+    'n',
+    '<C-n>',
+    ':NvimTreeFindFileToggle<cr>',
+    { silent = true, desc = 'Toggle NvimTree' }
+)
+
+vim.keymap.set(
+    'n',
+    '<leader>r',
+    ':NvimTreeRefresh<cr>',
+    { silent = true, desc = 'Refresh NvimTree' }
+)
+
+-- snacks picker
+vim.keymap.set('n', '<leader>ff', ':SnacksPickerFiles<cr>', {
+    silent = true,
+    desc = 'Snacks Picker Files',
+})
+
+vim.keymap.set('n', '<leader>gs', ':SnacksPickerGitStatus<cr>', {
+    silent = true,
+    desc = 'Snacks Picker Git Status',
+})
+
+vim.keymap.set('n', '<leader>lg', ':SnacksPickerGrep<cr>', {
+    silent = true,
+    desc = 'Snacks Picker Grep',
+})
+
+vim.keymap.set('n', '<leader>hh', ':SnacksPickerHelp<cr>', {
+    silent = true,
+    desc = 'Snacks Picker Help',
+})
+
+vim.keymap.set('n', '<leader>bf', ':SnacksPickerBuffers<cr>', {
+    silent = true,
+    desc = 'Snacks Picker Buffers',
+})
 
 -- search
 vim.keymap.set(

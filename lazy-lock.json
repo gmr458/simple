@@ -1,0 +1,7 @@
+{
+  "gitsigns.nvim": { "branch": "main", "commit": "4bcd99167c265f135886b282baad77afe06206b2" },
+  "lazy.nvim": { "branch": "main", "commit": "85c7ff3711b730b4030d03144f6db6375044ae82" },
+  "nvim-tree.lua": { "branch": "master", "commit": "69eb0c34ed3d836d5a0d92d913b77dd73b054f2f" },
+  "snacks.nvim": { "branch": "main", "commit": "882c996cf28183f4d63640de0b4c02ec886d01f2" },
+  "vim-scriptease": { "branch": "master", "commit": "4cc639dd70061bb1489f4d3655861ebd9bc896fa" }
+}
