@@ -6,3 +6,5 @@ require 'gmr.statusline'
 require 'gmr.winbar'
 require 'gmr.terminalcolors'
 require 'gmr.lazy'
+
+vim.cmd 'packadd nvim.undotree'
